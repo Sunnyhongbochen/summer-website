@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>丰图哪吒 · 公安行业新产品发布</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #0a0e17;
+    color: #e0e6ed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(10, 14, 23, 0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    z-index: 10;
+    backdrop-filter: blur(20px);
+  }
+  .top-bar .logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .top-bar .logo span {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .top-bar .badge {
+    font-size: 13px;
+    color: #8b9cb8;
+    background: rgba(255,255,255,0.05);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .slides-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    overflow-y: auto;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  .slide-title {
+    font-size: 38px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+  }
+  .slide-subtitle {
+    font-size: 16px;
+    color: #6b7d99;
+    text-align: center;
+    margin-bottom: 36px;
+    letter-spacing: 1px;
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+  }
+  .card-grid.col2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.auto { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+  .card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(79, 172, 254, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(79, 172, 254, 0.08);
+  }
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+  .card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 14px;
+    color: #8899b4;
+    line-height: 1.7;
+  }
+  .card .highlight {
+    color: #4facfe;
+    font-weight: 600;
+  }
+
+  .content-block {
+    max-width: 900px;
+    width: 100%;
+    text-align: left;
+  }
+  .content-block h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin: 32px 0 16px;
+    padding-left: 16px;
+    border-left: 3px solid #4facfe;
+  }
+  .content-block h2:first-child { margin-top: 0; }
+  .content-block h3 {
+    font-size: 19px;
+    font-weight: 600;
+    color: #d0dbe8;
+    margin: 24px 0 10px;
+  }
+  .content-block p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #96a8c0;
+    margin-bottom: 12px;
+  }
+  .content-block ul, .content-block ol {
+    margin: 8px 0 16px 24px;
+    color: #96a8c0;
+  }
+  .content-block li {
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 4px;
+  }
+  .content-block strong {
+    color: #4facfe;
+    font-weight: 700;
+  }
+
+  .table-wrap {
+    width: 100%;
+    max-width: 1000px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: rgba(79, 172, 254, 0.12);
+    color: #4facfe;
+    font-weight: 700;
+    text-align: left;
+    padding: 12px 18px;
+    border-bottom: 2px solid rgba(79, 172, 254, 0.2);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: #96a8c0;
+    line-height: 1.6;
+    vertical-align: top;
+  }
+  tbody tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag-blue { background: rgba(79,172,254,0.15); color: #4facfe; }
+  .tag-green { background: rgba(0,242,254,0.12); color: #00f2fe; }
+  .tag-orange { background: rgba(255,165,0,0.12); color: #ffa500; }
+
+  .cover {
+    text-align: center;
+  }
+  .cover .title-main {
+    font-size: 56px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    letter-spacing: 4px;
+  }
+  .cover .title-sub {
+    font-size: 22px;
+    color: #6b7d99;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+  }
+  .cover .divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    margin: 0 auto 40px;
+  }
+  .cover .meta {
+    font-size: 14px;
+    color: #556680;
+    line-height: 2;
+  }
+
+  .case-box {
+    background: linear-gradient(135deg, rgba(79,172,254,0.08), rgba(0,242,254,0.05));
+    border: 1px solid rgba(79,172,254,0.15);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 20px 0;
+  }
+  .case-box h4 {
+    font-size: 16px;
+    color: #4facfe;
+    margin-bottom: 12px;
+  }
+  .case-box p {
+    font-size: 14px;
+    color: #96a8c0;
+    line-height: 1.8;
+  }
+  .case-box .stat {
+    display: inline-block;
+    font-size: 28px;
+    font-weight: 800;
+    color: #00f2fe;
+    margin: 0 4px;
+  }
+
+  .bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px 40px;
+    background: rgba(10, 14, 23, 0.95);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    z-index: 10;
+    backdrop-filter: blur(20px);
+  }
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: #8899b4;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .nav-btn:hover {
+    background: rgba(79,172,254,0.15);
+    border-color: rgba(79,172,254,0.3);
+    color: #4facfe;
+  }
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .nav-btn:disabled:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.12);
+    color: #8899b4;
+  }
+
+  .page-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .page-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+  .page-dot.active {
+    background: #4facfe;
+    box-shadow: 0 0 12px rgba(79,172,254,0.4);
+    width: 32px;
+    border-radius: 5px;
+  }
+  .page-dot:hover {
+    background: rgba(79,172,254,0.4);
+  }
+
+  .page-indicator {
+    font-size: 13px;
+    color: #556680;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .hint {
+    font-size: 11px;
+    color: #3d4f66;
+    margin-left: 12px;
+  }
+
+  /* 流程 */
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+  .flow-step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #96a8c0;
+    text-align: center;
+    min-width: 80px;
+  }
+  .flow-step .num {
+    font-size: 20px;
+    font-weight: 700;
+    color: #4facfe;
+    display: block;
+  }
+  .flow-arrow {
+    color: #4facfe;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+    margin: 0 auto;
+    display: inline-block;
+  }
+
+  /* 响应式 */
+  @media (max-width: 900px) {
+    .slide { padding: 30px 24px; }
+    .card-grid.col2, .card-grid.col3 { grid-template-columns: 1fr; }
+    .cover .title-main { font-size: 32px; }
+    .slide-title { font-size: 26px; }
+    .top-bar { padding: 12px 20px; }
+    .bottom-bar { padding: 14px 20px; }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 8px 10px; }
+    .flow { gap: 6px; }
+    .flow-step { padding: 8px 10px; font-size: 11px; min-width: 60px; }
+    .flow-arrow { font-size: 14px; }
+  }
+
+  .slide::-webkit-scrollbar { width: 4px; }
+  .slide::-webkit-scrollbar-track { background: transparent; }
+  .slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="top-bar">
+    <div class="logo"><span>丰图哪吒</span> · 公安行业新产品发布</div>
+    <div class="badge">2026.07</div>
+  </div>
+
+  <div class="slides-container" id="slidesContainer">
+
+    <!-- 第1页：封面 -->
+    <div class="slide active cover" data-index="0">
+      <div class="title-main">丰图哪吒</div>
+      <div class="title-sub">AI + 时空智能底座平台</div>
+      <div class="divider"></div>
+      <p style="font-size:18px;color:#8899b4;max-width:600px;line-height:1.8;">
+        智能体解决民警的业务问题<br>
+        平台解决智能体从哪来、怎么用、谁来管
+      </p>
+      <div class="meta" style="margin-top:48px;">
+        丰图科技 G1 业务团队<br>
+        2026 年 7 月
+      </div>
+    </div>
+
+    <!-- 第2页：产品定位 -->
+    <div class="slide" data-index="1">
+      <div class="slide-title">哪吒是什么</div>
+      <div class="slide-subtitle">AI + 时空智能底座平台</div>
+      <div style="text-align:center;max-width:700px;">
+        <p style="font-size:17px;color:#96a8c0;line-height:2;margin-bottom:32px;">
+          哪吒平台与智能体应用的关系，类比为 <strong style="color:#4facfe;font-size:20px;">手机和 App</strong>
+        </p>
+        <div style="display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-bottom:30px;">
+          <div style="text-align:center;">
+            <div style="font-size:56px;">📱</div>
+            <div style="font-size:16px;color:#4facfe;font-weight:700;margin-top:8px;">哪吒平台</div>
+            <div style="font-size:13px;color:#6b7d99;margin-top:4px;">= 手机</div>
+            <div style="font-size:12px;color:#556680;margin-top:6px;max-width:200px;">对话入口、地图画布、数据通道、技能市场</div>
+          </div>
+          <div style="font-size:32px;color:#8899b4;display:flex;align-items:center;">+</div>
+          <div style="text-align:center;">
+            <div style="font-size:56px;">⚡</div>
+            <div style="font-size:16px;color:#00f2fe;font-weight:700;margin-top:8px;">智能体应用</div>
+            <div style="font-size:13px;color:#6b7d99;margin-top:4px;">= App</div>
+            <div style="font-size:12px;color:#556680;margin-top:6px;max-width:200px;">小案快破、轨迹哨兵等，解决具体业务场景</div>
+          </div>
+        </div>
+        <p style="font-size:14px;color:#6b7d99;">
+          平台提供四项基础能力：对话入口、地图画布、数据通道、技能市场
+        </p>
+      </div>
+    </div>
+
+    <!-- 第3页：产品架构 -->
+    <div class="slide" data-index="2">
+      <div class="slide-title">产品架构全景</div>
+      <div class="slide-subtitle">四层架构，从底座到场景</div>
+      <div class="card-grid auto" style="max-width:1000px;">
+        <div class="card" style="border-top:3px solid #00f2fe;">
+          <div class="card-icon">🎯</div>
+          <h3>第四层：场景智能体</h3>
+          <p>
+            <span class="tag tag-blue">小案快破</span>
+            <span class="tag tag-green">轨迹哨兵</span>
+          </p>
+          <p style="font-size:12px;color:#6b7d99;margin-top:6px;">解决具体业务场景，民警日常直接打交道的就是它们</p>
+        </div>
+        <div class="card" style="border-top:3px solid #a78bfa;">
+          <div class="card-icon">🧩</div>
+          <h3>第三层：智能体编排</h3>
+          <p>Tool 能力库 · Skill 编排 · 角色装配 · 场景模版</p>
+          <p style="font-size:12px;color:#6b7d99;margin-top:6px;">把工具编排为技能，按角色装配，固化为场景模版</p>
+        </div>
+        <div class="card" style="border-top:3px solid #4facfe;">
+          <div class="card-icon">🏗️</div>
+          <h3>第二层：行业数据域</h3>
+          <p>警情、案件、人员、车辆、场所、轨迹、重点对象、研判规则</p>
+          <p style="font-size:12px;color:#6b7d99;margin-top:6px;">公安行业专属的数据模型和业务规则</p>
+        </div>
+        <div class="card" style="border-top:3px solid #ffa500;">
+          <div class="card-icon">⚙️</div>
+          <h3>第一层：通用时空底座</h3>
+          <p>地址中心 · 地图中心 · 要素中心 · 能力中心 · 授权中心</p>
+          <p style="font-size:12px;color:#6b7d99;margin-top:6px;">所有智能体共享的公共能力，一次建设、持续复用</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第4页：平台七大核心能力 -->
+    <div class="slide" data-index="3">
+      <div class="slide-title">平台七大核心能力</div>
+      <div class="slide-subtitle">支撑所有场景智能体的公共底座</div>
+      <div class="card-grid col2" style="max-width:1000px;">
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <h3>AI 智能对话</h3>
+          <p>自然语言交互，多轮对话记忆上下文，支持语音输入，对接 <span class="highlight">20+ 主流大模型</span></p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗺️</div>
+          <h3>GIS 空间智能</h3>
+          <p><span class="highlight">15 种地图可视化</span>方式，百万级点位流畅渲染，数据一张图看清</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🛒</div>
+          <h3>AI 技能市场</h3>
+          <p>类似"应用商店"，按需<span class="highlight">安装/卸载/升级</span>技能，新需求不重新招标</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📚</div>
+          <h3>知识库引擎</h3>
+          <p>文档/案例/预案智能入库，<span class="highlight">语义检索</span>，组织经验变成 AI 可用知识资产</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">⏰</div>
+          <h3>定时任务自动化</h3>
+          <p>可视化配置，<span class="highlight">每日警情汇总、每周巡检报告</span>自动执行</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📱</div>
+          <h3>多端适配</h3>
+          <p>PC 端完整功能 + 移动端轻量化交互，<span class="highlight">办公室和现场都能用</span></p>
+        </div>
+        <div class="card" style="grid-column:1/-1;">
+          <div class="card-icon">🖥️</div>
+          <h3>运维监控中心</h3>
+          <p>集中监控 · 全链路日志留痕 · <span class="highlight">OTA 远程升级</span>一键推送 · 基于角色的权限控制</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第5页：小案快破（上）—— 场景 & 怎么干 -->
+    <div class="slide" data-index="4">
+      <div class="slide-title">小案快破智能体</div>
+      <div class="slide-subtitle">盗窃 / 寻衅 / 涉毒 / 涉诈 —— 小案不小看，快破是关键</div>
+      <div class="content-block">
+        <div class="card-grid col2" style="max-width:900px;">
+          <div>
+            <h3 style="margin-top:0;">解决什么问题</h3>
+            <p>派出所民警接到盗窃、打架这类小案，要自己串线索，案子多的时候<span class="highlight">根本串不过来</span>，很多小案直接挂着没人管，群众满意度低。</p>
+            <h3>目标用户</h3>
+            <ul>
+              <li><strong>派出所值班民警</strong>：接到报警后第一时间调取案发地周边监控抓拍数据</li>
+              <li><strong>刑侦办案民警</strong>：快速锁定嫌疑人活动轨迹</li>
+              <li><strong>案件研判人员</strong>：串并分析，识别高频作案人员</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin-top:0;">怎么干</h3>
+            <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;text-align:center;">
+              <p style="font-size:15px;color:#e0e6ed;margin-bottom:12px;">警情进来</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:14px;color:#96a8c0;">地址标准化</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:14px;color:#96a8c0;">500 米圈选</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:14px;color:#96a8c0;">时空碰撞</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:15px;color:#00f2fe;font-weight:700;">高频目标标红</p>
+            </div>
+            <p style="margin-top:12px;"><strong>输出结果</strong>：线索清单 + 轨迹地图 + 研判报告，民警拿到就能行动</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第6页：小案快破（下）—— 业务流 & 案例 -->
+    <div class="slide" data-index="5">
+      <div class="slide-title">小案快破 · 从一句话到结果</div>
+      <div class="slide-subtitle">"千灯镇炎中路，昨晚8点到10点，盗窃电动车"</div>
+      <div class="content-block">
+        <div class="flow">
+          <div class="flow-step"><span class="num">①</span>AI 理解意图</div><div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="num">②</span>地址解析</div><div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="num">③</span>数据库查询</div><div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="num">④</span>数据校验</div><div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="num">⑤</span>地图标注</div><div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="num">⑥</span>表格展示</div><div class="flow-arrow">→</div>
+          <div class="flow-step"><span class="num">⑦</span>AI 摘要</div>
+        </div>
+
+        <div class="case-box">
+          <h4>📋 真实案例：昆山市电动车盗窃案（2026年6月）</h4>
+          <p>
+            <strong>背景</strong>：受害人报警仅能提供案发时间约 18:30—19:00，无法提供嫌疑人体貌特征<br>
+            <strong>过程</strong>：民警录入案情 → 智能体自动解析关键信息 → 匹配周边监控点位 → 筛选可疑人员 → 轨迹关联分析 → 自动生成研判报告<br>
+            <strong>成效</strong>：视频调取 <span style="color:#ff6b6b;text-decoration:line-through;">40分钟</span> → <span class="stat">5</span> 分钟 &nbsp;|&nbsp; 嫌疑人筛查 <span style="color:#ff6b6b;text-decoration:line-through;">2小时</span> → <span class="stat">20</span> 分钟
+          </p>
+        </div>
+        <p style="text-align:center;margin-top:16px;font-size:16px;">
+          <strong>从"小时级"到"分钟级"，效率提升数十倍</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- 第7页：轨迹哨兵（上）—— 场景 & 怎么干 -->
+    <div class="slide" data-index="6">
+      <div class="slide-title">轨迹哨兵智能体</div>
+      <div class="slide-subtitle">发现隐蔽的时空交集，让尾随和同行关系一目了然</div>
+      <div class="content-block">
+        <div class="card-grid col2" style="max-width:900px;">
+          <div>
+            <h3 style="margin-top:0;">解决什么问题</h3>
+            <p>刑侦民警查嫌疑人有没有同伙、有没有人一直跟着目标出现、谁和谁同时出现在同一个地方，<span class="highlight">人工排查看不全还容易漏</span>。</p>
+            <h3>目标用户</h3>
+            <ul>
+              <li><strong>刑侦研判民警</strong>：验证多名嫌疑人是否存在同行关系</li>
+              <li><strong>反诈/反扒专班</strong>：分组监控重点人员活动轨迹和交集</li>
+              <li><strong>情报分析人员</strong>：批量排查人员间的时空关联</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="margin-top:0;">怎么干</h3>
+            <div style="background:rgba(255,255,255,0.03);border-radius:12px;padding:16px;text-align:center;">
+              <p style="font-size:15px;color:#e0e6ed;margin-bottom:12px;">批量拉取轨迹</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:14px;color:#96a8c0;">30 分钟 / 500 米碰撞</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:14px;color:#96a8c0;">多人碰撞优先</p>
+              <p style="color:#4facfe;font-size:18px;">↓</p>
+              <p style="font-size:15px;color:#00f2fe;font-weight:700;">跨组 / 同伙 / 路线分析</p>
+            </div>
+            <p style="margin-top:12px;"><strong>输出结果</strong>：伴随关系报告 + 碰撞点地图 + 同伙关联图</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第8页：轨迹哨兵（下）—— 案例 -->
+    <div class="slide" data-index="7">
+      <div class="slide-title">轨迹哨兵 · 实际案例</div>
+      <div class="slide-subtitle">158 名多头交往重点人员 → 3 分钟发现 17 组尾随关系</div>
+      <div class="content-block">
+        <div class="case-box" style="max-width:900px;margin:0 auto;">
+          <h4>📋 昆山市：多头交往重点人员尾随风险快速发现</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div>
+              <p><strong>分析规模</strong></p>
+              <p style="font-size:13px;color:#96a8c0;">158 名重点人员<br>近 7 日抓拍轨迹 <span class="stat">19,832</span> 条<br>碰撞规则：500 米 + 30 分钟</p>
+            </div>
+            <div>
+              <p><strong>分析结果</strong></p>
+              <p style="font-size:13px;color:#96a8c0;">尾随同行组合 <span class="stat">17</span> 组<br>尾随事件 <span class="stat">286</span> 次<br>某分组 5 人连续尾随 4 天</p>
+            </div>
+          </div>
+          <div style="margin-top:20px;text-align:center;">
+            <p><strong>效率对比</strong></p>
+            <p>
+              人工分析 <span style="color:#ff6b6b;text-decoration:line-through;">约 4 小时</span> &nbsp;→&nbsp;
+              智能体分析 <span class="stat">3</span> 分钟
+            </p>
+            <p style="font-size:18px;color:#00f2fe;font-weight:700;margin-top:8px;">轨迹分析效率提升 98% 以上</p>
+          </div>
+        </div>
+        <p style="text-align:center;margin-top:20px;font-size:15px;color:#96a8c0;">
+          成功锁定 5 名多头交往重点人员尾随风险，快速反馈至相关民警进行进一步跟进
+        </p>
+      </div>
+    </div>
+
+    <!-- 第9页：数据底座 -->
+    <div class="slide" data-index="8">
+      <div class="slide-title">数据底座能力</div>
+      <div class="slide-subtitle">已打通五大类业务数据，AI 按需调用</div>
+      <div class="table-wrap" style="max-width:900px;">
+        <table>
+          <thead>
+            <tr><th>数据类别</th><th>数据内容</th><th>使用场景</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tag tag-blue">监控抓拍</span></td><td>人员经过摄像头的记录（姓名、身份证、抓拍时间、设备位置、照片）</td><td>小案快破</td></tr>
+            <tr><td><span class="tag tag-green">人员轨迹</span></td><td>重点人员活动轨迹（何时、被哪个设备拍到），默认可查近 3 天</td><td>轨迹哨兵</td></tr>
+            <tr><td><span class="tag tag-orange">摄像头点位</span></td><td>全市摄像头名称和地理坐标</td><td>轨迹哨兵（轨迹上图）</td></tr>
+            <tr><td><span class="tag tag-blue">地址标准化</span></td><td>口语化地址 → 标准地址 + 精确坐标，主备双服务保障</td><td>小案快破</td></tr>
+            <tr><td><span class="tag tag-green">地图服务</span></td><td>地点搜索、地理编码、地图底图渲染</td><td>全平台</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-grid col2" style="max-width:900px;margin-top:20px;">
+        <div class="card">
+          <h3>🔗 轨迹自动串联</h3>
+          <p>轨迹系统（人-时间-设备）+ 点位库（设备-坐标）→ 自动拼接完整轨迹，对民警完全透明</p>
+        </div>
+        <div class="card">
+          <h3>✅ 数据校验机制</h3>
+          <p>记录数核对 · 身份证格式检查 · 字段完整性 · 原始顺序保持 · <strong style="color:#ff6b6b;">一票否决</strong></p>
+        </div>
+        <div class="card">
+          <h3>🏠 地址智能标准化</h3>
+          <p>口语化地址自动解析 · 前缀自动补全 · 主备双服务保障 · 定位不准主动告知</p>
+        </div>
+        <div class="card">
+          <h3>🛠️ AI 工具体系</h3>
+          <p>数据库查询 · 地图标注 · 地图服务 · 文件处理 · 脚本执行 · 定时任务 · 数据表格</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第10页：部署环境 -->
+    <div class="slide" data-index="9">
+      <div class="slide-title">部署环境 & 技术参数</div>
+      <div class="slide-subtitle">信创智慧算底座，国产化全栈支持</div>
+      <div class="table-wrap" style="max-width:900px;">
+        <table>
+          <thead>
+            <tr><th>服务器类型</th><th>核心组件</th><th>规格参数</th><th>部署内容</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>应用服务器</strong></td>
+              <td>CPU / 内存 / 磁盘</td>
+              <td>8 核 / 16GB / 500GB</td>
+              <td>哪吒应用、数据库及数据治理工具</td>
+            </tr>
+            <tr>
+              <td><strong>GPU 服务器</strong></td>
+              <td>AI 加速卡 / CPU / 内存 / 存储</td>
+              <td>2×华为昇腾 910B3 (64GB)<br>≥48 核 / 256GB / 2TB</td>
+              <td>Qwen-3.6-27B 模型<br>vLLM-Ascend 推理引擎</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="max-width:900px;width:100%;margin-top:24px;">
+        <div class="card-grid col3" style="max-width:900px;">
+          <div class="card">
+            <h3>🧠 推荐模型</h3>
+            <p>Qwen-3.6 27B<br>W8A8-INT8 量化<br>64K 上下文<br>vLLM-Ascend 引擎</p>
+          </div>
+          <div class="card">
+            <h3>⚡ 性能指标</h3>
+            <p>首 Token <span style="font-size:20px;color:#00f2fe;font-weight:800;">~2s</span><br>输出速率 <span style="font-size:20px;color:#00f2fe;font-weight:800;">30</span> token/s<br>支持 <span style="font-size:20px;color:#00f2fe;font-weight:800;">6</span> 个并发用户</p>
+          </div>
+          <div class="card">
+            <h3>🖥️ 运维能力</h3>
+            <p>多实例管理<br>灰度发布 + 一键回滚<br>OTA 远程升级<br>全链路日志监控</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第11页：FAQ -->
+    <div class="slide" data-index="10">
+      <div class="slide-title">常见问题</div>
+      <div class="slide-subtitle">平台解决的不是某个办案场景，而是三个建设层面的问题</div>
+      <div class="card-grid col3" style="max-width:1000px;">
+        <div class="card">
+          <div class="card-icon">❓</div>
+          <h3>为什么不能给民警一堆脚本？</h3>
+          <p>每个智能体背后都有复杂的数据查询和分析脚本，但<span class="highlight">不能直接让民警跑脚本</span>。平台提供统一对话入口和地图界面——用说话代替敲命令，用看地图代替读数据表。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏗️</div>
+          <h3>为什么不能每个场景单独建系统？</h3>
+          <p>小案快破和轨迹哨兵都需要地址标准化和地图画布。如果各建各的，<span class="highlight">对接做两遍、地图搭两套、账号管两份</span>。哪吒把公共能力做成共享底座，新场景只开发"技能"部分。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🏢</div>
+          <h3>怎么管理多单位多环境？</h3>
+          <p>管理端支持<span class="highlight">按用户自动创建隔离环境</span>，统一管理版本升级（灰度发布+一键回滚），集中监控各环境运行状态和日志。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 第12页：客户价值 & 结束 -->
+    <div class="slide" data-index="11">
+      <div class="slide-title">客户价值一览</div>
+      <div class="slide-subtitle">哪吒 vs 传统方式，全方位升级</div>
+      <div class="table-wrap" style="max-width:1000px;">
+        <table>
+          <thead>
+            <tr><th>维度</th><th style="color:#ff6b6b;">传统方式</th><th style="color:#4facfe;">哪吒方式</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>使用门槛</strong></td><td>需要培训，记忆操作路径</td><td style="color:#00f2fe;">自然语言对话，零门槛上手</td></tr>
+            <tr><td><strong>分析效率</strong></td><td>小时级甚至天级</td><td style="color:#00f2fe;">分钟级</td></tr>
+            <tr><td><strong>空间感知</strong></td><td>看表格、看文字报告</td><td style="color:#00f2fe;">一张地图看清所有</td></tr>
+            <tr><td><strong>能力扩展</strong></td><td>新需求 → 重新立项招标</td><td style="color:#00f2fe;">技能市场一键安装</td></tr>
+            <tr><td><strong>运维管理</strong></td><td>多套系统、多个后台</td><td style="color:#00f2fe;">一个控制台管所有节点</td></tr>
+            <tr><td><strong>知识沉淀</strong></td><td>经验在个人脑中</td><td style="color:#00f2fe;">知识库引擎，全员共享</td></tr>
+            <tr><td><strong>数据质量</strong></td><td>人工核对，容易出错</td><td style="color:#00f2fe;">自动校验，一票否决</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="text-align:center;margin-top:32px;">
+        <div class="divider" style="display:block;margin:0 auto 24px;"></div>
+        <p style="font-size:20px;color:#fff;font-weight:700;">感谢关注</p>
+        <p style="font-size:14px;color:#6b7d99;margin-top:8px;">丰图科技 G1 业务团队 · 2026.07</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 底部导航 -->
+  <div class="bottom-bar">
+    <button class="nav-btn" id="btnPrev" title="上一页 (←)" disabled>◀</button>
+    <div class="page-dots" id="pageDots"></div>
+    <button class="nav-btn" id="btnNext" title="下一页 (→)">▶</button>
+    <span class="page-indicator" id="pageIndicator">1 / 12</span>
+    <span class="hint">← → 键盘翻页</span>
+  </div>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let currentIndex = 0;
+  let isTransitioning = false;
+
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const pageDots = document.getElementById('pageDots');
+  const pageIndicator = document.getElementById('pageIndicator');
+
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'page-dot' + (i === 0 ? ' active' : '');
+    dot.title = '第 ' + (i + 1) + ' 页';
+    dot.addEventListener('click', () => goTo(i));
+    pageDots.appendChild(dot);
+  }
+
+  function updateNav() {
+    btnPrev.disabled = currentIndex === 0;
+    btnNext.disabled = currentIndex === totalSlides - 1;
+    pageIndicator.textContent = (currentIndex + 1) + ' / ' + totalSlides;
+    const dots = pageDots.querySelectorAll('.page-dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+  }
+
+  function goTo(index) {
+    if (isTransitioning || index === currentIndex || index < 0 || index >= totalSlides) return;
+    isTransitioning = true;
+
+    const oldSlide = slides[currentIndex];
+    const newSlide = slides[index];
+    const goingForward = index > currentIndex;
+
+    oldSlide.classList.remove('active');
+    oldSlide.classList.add(goingForward ? 'exit-left' : '');
+    oldSlide.style.transform = goingForward ? 'translateX(-60px)' : 'translateX(60px)';
+
+    newSlide.classList.remove('exit-left');
+    newSlide.style.transform = goingForward ? 'translateX(60px)' : 'translateX(-60px)';
+    void newSlide.offsetWidth;
+    newSlide.classList.add('active');
+    newSlide.style.transform = 'translateX(0)';
+
+    currentIndex = index;
+    updateNav();
+    newSlide.scrollTop = 0;
+
+    setTimeout(() => {
+      oldSlide.style.transform = '';
+      isTransitioning = false;
+    }, 500);
+  }
+
+  btnPrev.addEventListener('click', () => goTo(currentIndex - 1));
+  btnNext.addEventListener('click', () => goTo(currentIndex + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(currentIndex - 1);
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(currentIndex + 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(totalSlides - 1);
+    }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 60) {
+      goTo(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+    }
+  });
+
+  updateNav();
+})();
+</script>
+
+</body>
+</html>
