@@ -1,5 +1,8 @@
 ---
 sites:
+  - name: "襄阳市城市部件数据管理平台"
+    url: "http://82.157.103.93:8888/"
+    desc: "基于GIS的城市管理部件可视化平台，支持部件普查、分权管理、操作审计（演示账号 admin / admin123）"
   - name: "阮一峰的网络日志"
     url: "https://www.ruanyifeng.com/home.html"
     desc: "科技爱好者周刊，每周五发布"
